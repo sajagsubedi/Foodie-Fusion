@@ -78,7 +78,6 @@ const SortMenu = ({ state }) => {
       active: false,
       selectedOpt: sortData[ind].options[i],
     };
-    console.log("before change if sortfilter", prevSortFilter);
     changeSortFilters(newsortfilter);
   };
 
@@ -121,14 +120,15 @@ const SortMenu = ({ state }) => {
         return { ...item, active: false };
       });
       let comObj = { ...prevSortFilter, selectFilters: selectFilters };
-     // if (JSON.stringify(comObj) !== JSON.stringify(sortfilter)) {
+      if (JSON.stringify(comObj) !== JSON.stringify(sortfilter)) {
+        window.scrollTo(0,0)
         if (sortfilter.isquery == true) {
           fetchFilteredRecipes({ ...sortfilter, isAction: false });
         } else {
           fetchRecipes();
         }
-         changePrevSortFilter({ ...sortfilter });
-     // }
+        changePrevSortFilter({ ...sortfilter });
+      }
       changeLoading(false);
       changeSortFilters({ ...sortfilter, isAction: false });
     }

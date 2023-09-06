@@ -1,4 +1,6 @@
-import { Hero, RecipeItem, RecipeCarousel } from "@/components";
+import { Hero, RecipeItem } from "@/components";
+import { Link } from "next/link";
+import { RecipeCarousel } from "@/styles/ComponentStyles";
 async function Home() {
   let url =
     "https://api.spoonacular.com/recipes/random?apiKey=3ca61df6115c4e5a88ff46ef66e7d657&number=10";
@@ -22,19 +24,26 @@ async function Home() {
       <h1 className="sectionHeading">Trending Recipes</h1>
       <RecipeCarousel>
         <div className="carrousel">
-          {trendingRecipes.recipes.map((data, i) => {
-            return (
-              <div key={i} className="RecipeCard">
-                <div className="recipeImg">
-                  <img src={data.image} alt="loading" />
+          {!!trendingRecipes.recipes &&
+            trendingRecipes.recipes.map((data, i) => {
+              return (
+                <div key={i} className="RecipeCard">
+                  <div className="recipeImg">
+                    <img src={data.image} alt="loading" />
+                  </div>
+                  <div className="recipeBody">
+                    <p>{data.title}</p>
+                      <a
+                      className="btn PrimaryBtn"
+                      href={`/recipe/${data.id}`}
+                    >
+                      View Recipe
+                    </a>
+                    
+                  </div>
                 </div>
-                <div className="recipeBody">
-                  <p>{data.title}</p>
-                  <a href="/">Visit</a>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </RecipeCarousel>
     </main>

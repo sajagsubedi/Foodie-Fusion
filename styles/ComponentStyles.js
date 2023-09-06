@@ -54,7 +54,7 @@ export const RecipeSortMenu = styled.aside`
     padding: 10px 5px;
     position: relative;
   }
-  .sortHead {
+  .SortHead {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -169,13 +169,12 @@ export const RecipeSortMenu = styled.aside`
   }
 `;
 export const SortToggleBtn = styled.button`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 8px;
-  padding: 8px;
   border: none;
-  outline: none;
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1), 0 0 2px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -188,6 +187,9 @@ export const SortToggleContainer = styled.section`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  position: sticky;
+  z-index: 4;
+  top: 65px;
 `;
 
 export const RecipePage = styled.article`
@@ -236,16 +238,28 @@ export const RecipeCarousel = styled.section`
     scroll-snap-align: center;
   }
   .carrousel .btn {
-    width: 80px;
+    padding: 8px;
+    width: max-content;
   }
   .RecipeCard {
     min-height: 200px;
     min-width: 300px;
     display: flex;
+    flex-direction: column;
     border-radius: 30px;
     align-items: center;
     justify-content: center;
-    background: var(--focusColor);
-    color: white;
+    overflow: hidden;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  }
+  .RecipeCard .recipeImg img {
+    width: 100%;
+  }
+  .RecipeCard .recipeBody {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
   }
 `;

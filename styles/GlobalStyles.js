@@ -7,7 +7,9 @@ export default createGlobalStyle`
   box-sizing: border-box;
   font-family: sans-serif;
 }
-
+body{
+  scroll-behaviour:smooth;
+}
 :root {
   --focusColor: rgba(251, 191, 36, 1);
   --primaryColor: 243, 244, 246;
@@ -441,5 +443,12 @@ a{
 }
 .contactForm .PrimaryBtn {
   border-radius: 6px;
+}
+.recipeGroup {
+  display: flex;
+  margin: 20px;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
 }
 `;
