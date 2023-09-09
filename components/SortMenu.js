@@ -74,7 +74,7 @@ const SortMenu = ({ state }) => {
 
   const handelSortChange = (ind, i) => {
     let newsortfilter = { ...sortfilter };
-    newsortfilter.selectFilters[ind] = {
+    newsortfilter.currentState.selectFilters[ind] = {
       active: false,
       selectedOpt: sortData[ind].options[i],
     };
@@ -83,54 +83,60 @@ const SortMenu = ({ state }) => {
 
   const toggleSelectMenu = (ind) => {
     let newsortfilter = { ...sortfilter };
-    newsortfilter.selectFilters[ind] = {
-      ...newsortfilter.selectFilters[ind],
-      active: !newsortfilter.selectFilters[ind].active,
+    newsortfilter.currentState.selectFilters[ind] = {
+      ...newsortfilter.currentState.selectFilters[ind],
+      active: !newsortfilter.currentState.selectFilters[ind].active,
     };
     changeSortFilters(newsortfilter);
   };
 
   const handleSearchChange = (e) => {
-    changeSortFilters({ ...sortfilter, searchQuery: e.target.value });
+    changeSortFilters({
+      ...sortfilter,
+      currentState: {
+        ...sortfilter.currentState,
+        searchQuery: e.target.value,
+      },
+    });
   };
 
   const handleApply = () => {
     let newObj = { ...sortfilter };
     newObj.isAction = true;
-    let selectFilters = newObj.selectFilters.map((item) => {
+    let selectFilters = newObj.currentState.selectFilters.map((item) => {
       return { ...item, active: false };
     });
-    newObj.selectFilters = [...selectFilters];
+    newObj.currentState.selectFilters = [...selectFilters];
     changeSortFilters(newObj);
     toggleSort();
   };
   const handleClear = () => {
     let newObj = { ...sortfilter };
-    let selectFilters = newObj.selectFilters.map((item) => {
+    let selectFilters = newObj.currentState.selectFilters.map((item) => {
       return { ...item, active: false };
     });
-    newObj.selectFilters = [...selectFilters];
+    newObj.currentState.selectFilters = [...selectFilters];
     clearSortFilter(newObj);
     toggleSort();
   };
   const validateAct = () => {
     if (sortfilter.isAction == true) {
       changeLoading(true);
-      let selectFilters = prevSortFilter.selectFilters.map((item) => {
-        return { ...item, active: false };
-      });
-      let comObj = { ...prevSortFilter, selectFilters: selectFilters };
-      if (JSON.stringify(comObj) !== JSON.stringify(sortfilter)) {
-        window.scrollTo(0,0)
-        if (sortfilter.isquery == true) {
-          fetchFilteredRecipes({ ...sortfilter, isAction: false });
-        } else {
-          fetchRecipes();
-        }
-        changePrevSortFilter({ ...sortfilter });
+      window.scrollTo(0, 0);
+      if (sortfilter.currentState.isquery == true) {
+        const newSortFilter = JSON.parse(JSON.stringify(sortfilter));
+        fetchFilteredRecipes(newSortFilter, () => {
+          console.log("callbackRun")
+          changeSortFilters({
+            ...sortfilter,
+            isAction: false,
+            fetchState: { ...sortfilter.currentState },
+          });
+        });
+      } else {
+        fetchRecipes();
       }
       changeLoading(false);
-      changeSortFilters({ ...sortfilter, isAction: false });
     }
   };
 
@@ -186,15 +192,19 @@ const SortMenu = ({ state }) => {
               <h5>{data.heading}</h5>
               <div
                 className={`select-menu 
-                ${sortfilter.selectFilters[ind].active ? "active" : ""}`}
+                ${
+                  sortfilter.currentState.selectFilters[ind].active
+                    ? "active"
+                    : ""
+                }`}
               >
                 <div
                   className="select-btn"
                   onClick={() => toggleSelectMenu(ind)}
                 >
                   <span className="sBtn-text">
-                    {sortfilter.selectFilters[ind].selectedOpt
-                      ? sortfilter.selectFilters[ind].selectedOpt
+                    {sortfilter.currentState.selectFilters[ind].selectedOpt
+                      ? sortfilter.currentState.selectFilters[ind].selectedOpt
                       : "Select your option"}
                   </span>
                   <svg

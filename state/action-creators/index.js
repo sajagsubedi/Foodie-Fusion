@@ -13,9 +13,16 @@ export const fetchRecipes = (payload) => {
     });
   };
 };
-export const fetchFilteredRecipes = (payload) => {
-  return async (dispatch) => {
-    const { searchQuery, selectFilters } = payload;
+export const fetchFilteredRecipes = (payload,callBack) => {
+  return async (dispatch, getState) => {
+    const mystate = getState().sortfilter;
+    if (
+      JSON.stringify(payload.currentState) ===
+      JSON.stringify(mystate.fetchState)
+    ) {
+      return;
+    }
+    const { searchQuery, selectFilters } = payload.currentState;
     const diet = selectFilters[0].selectedOpt;
     const cuisine = selectFilters[1].selectedOpt;
     const meal = selectFilters[2].selectedOpt;
@@ -35,7 +42,7 @@ export const fetchFilteredRecipes = (payload) => {
     let resp = await fetch(url);
     resp = await resp.json();
     const { number, offset, totalResults } = resp;
-
+    callBack()
     dispatch({
       type: "fetch",
       payload: {

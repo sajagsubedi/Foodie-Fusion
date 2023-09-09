@@ -2,8 +2,7 @@ const compareValue = (arg1, arg2) => {
   return JSON.stringify(arg1) == JSON.stringify(arg2);
 };
 const changeFilterReducer = (state, action) => {
-  const defaultState = {
-    isAction: false,
+  const stateStructure = {
     isquery: false,
     searchQuery: "",
     selectFilters: [
@@ -21,26 +20,46 @@ const changeFilterReducer = (state, action) => {
       },
     ],
   };
+  const defaultState = {
+    isAction: false,
+    fetchState: { ...stateStructure },
+    currentState: { ...stateStructure },
+  };
   if (!state) {
     state = { ...defaultState };
   }
   const { type, payload } = action;
   if (type == "change") {
-    let toComparePayload = { ...payload, isquery: false, isAction: false };
-    if (compareValue(toComparePayload, defaultState)) {
+    let toComparePayload = {
+      ...payload.currentState,
+      isquery: false,
+    };
+    if (compareValue(toComparePayload, defaultState.currentState)) {
       state = { ...defaultState };
       return defaultState;
     } else {
-      state = { ...payload, isquery: true };
-      return { ...payload, isquery: true };
+      let newState = {
+        ...payload,
+      };
+      newState.currentState.isquery = true;
+      state = { ...newState };
+      return newState;
     }
   } else if (type === "clear") {
     if (
-      !compareValue(payload.selectFilters, defaultState.selectFilters) ||
-      payload.searchQuery !== defaultState.searchQuery
+      !compareValue(
+        payload.currentState.selectFilters,
+        defaultState.currentState.selectFilters
+      ) ||
+      payload.currentState.searchQuery !== defaultState.currentState.searchQuery
     ) {
-      state = { ...defaultState, isAction: true };
-      return { ...defaultState, isAction: true };
+      let newState = {
+        ...defaultState,
+        isAction: true,
+        currentState: { ...defaultState.currentState },
+      };
+      state = { ...newState };
+      return newState;
     }
   }
   return state;

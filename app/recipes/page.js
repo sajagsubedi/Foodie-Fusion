@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { RecipeItem, SortMenu, Spinner } from "@/components";
 import { SortToggleContainer, SortToggleBtn } from "@/styles/ComponentStyles";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 export default function Page() {
   const recipes = useSelector((state) => state.recipes);
@@ -49,7 +47,6 @@ export default function Page() {
     setLoading(arg);
   };
   useEffect(() => {
-    AOS.init();
     setLoading(true);
     if (recipes.recipes.length === 0) {
       fetchRecipes();
