@@ -13,13 +13,14 @@ export const fetchRecipes = (payload) => {
     });
   };
 };
-export const fetchFilteredRecipes = (payload,callBack) => {
-  return async (dispatch, getState) => {
-    const mystate = getState().sortfilter;
+export const fetchFilteredRecipes = (payload) => {
+  console.log("Call for refetcg");
+  return async (dispatch) => {
     if (
       JSON.stringify(payload.currentState) ===
-      JSON.stringify(mystate.fetchState)
+      JSON.stringify(payload.fetchState)
     ) {
+      console.log("returned");
       return;
     }
     const { searchQuery, selectFilters } = payload.currentState;
@@ -42,8 +43,7 @@ export const fetchFilteredRecipes = (payload,callBack) => {
     let resp = await fetch(url);
     resp = await resp.json();
     const { number, offset, totalResults } = resp;
-    callBack()
-    dispatch({
+    return dispatch({
       type: "fetch",
       payload: {
         recipes: resp.results,

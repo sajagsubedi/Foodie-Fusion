@@ -119,20 +119,14 @@ const SortMenu = ({ state }) => {
     clearSortFilter(newObj);
     toggleSort();
   };
-  const validateAct = () => {
+  const validateAct = async () => {
     if (sortfilter.isAction == true) {
       changeLoading(true);
       window.scrollTo(0, 0);
       if (sortfilter.currentState.isquery == true) {
-        const newSortFilter = JSON.parse(JSON.stringify(sortfilter));
-        fetchFilteredRecipes(newSortFilter, () => {
-          console.log("callbackRun")
-          changeSortFilters({
-            ...sortfilter,
-            isAction: false,
-            fetchState: { ...sortfilter.currentState },
-          });
-        });
+        let func = await fetchFilteredRecipes(sortfilter);
+        console.log(func);
+        changeSortFilters({ ...sortfilter, isAction: false });
       } else {
         fetchRecipes();
       }
@@ -142,6 +136,7 @@ const SortMenu = ({ state }) => {
 
   useEffect(() => {
     validateAct();
+    changeSortFilters({isAction:false,fetchState:{...sortfilter.currentState},...sortfilter})
   }, [sortfilter]);
   return (
     <RecipeSortMenu isactive={`${isSortMenuActive}`}>
