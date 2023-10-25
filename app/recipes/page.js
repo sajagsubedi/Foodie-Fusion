@@ -1,9 +1,8 @@
 "use client";
-
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators } from "@/state/index";
 import { bindActionCreators } from "redux";
-import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { RecipeItem, SortMenu, Spinner } from "@/components";
 import { SortToggleContainer, SortToggleBtn } from "@/styles/ComponentStyles";

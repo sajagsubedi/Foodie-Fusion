@@ -8,12 +8,12 @@ import { store } from "@/state/store";
 export default function Wrapper({ children }) {
   return (
     <Provider store={store}>
-          <ThemeProvider theme={theme}>
-           <GlobalStyle />
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <Navbar />
         {children}
         <Footer />
-          </ThemeProvider>
+      </ThemeProvider>
     </Provider>
   );
 }
